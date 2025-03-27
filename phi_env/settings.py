@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'djoser',
     'drf_yasg',
+    "corsheaders",
     'api',
     'order',
     'products',
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -71,6 +73,10 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'phi_env.wsgi.app'
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]
 
 INTERNAL_IPS = [
     # ...
