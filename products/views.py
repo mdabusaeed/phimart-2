@@ -12,7 +12,7 @@ from products.permissions import IsReveiwAuthor
 from drf_yasg.utils import swagger_auto_schema
 
 
-class ProductViewSet(ModelViewSet):
+class ProductViewList(ModelViewSet):
     """
     API endpoint for managing products in the e-commerce store
      - Allows authenticated admin to create, update, and delete products
