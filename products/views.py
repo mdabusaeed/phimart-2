@@ -10,6 +10,7 @@ from api.permissions import IsAdminOrReadOnly
 from rest_framework.permissions import DjangoModelPermissions
 from products.permissions import IsReveiwAuthor
 from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 
 class ProductViewList(ModelViewSet):
@@ -30,24 +31,53 @@ class ProductViewList(ModelViewSet):
     permission_classes = [IsAdminOrReadOnly]
 
     @swagger_auto_schema(
-        operation_summary='Retrive a list of products'
-    )
-    def list(self, request, *args, **kwargs):
-        """Retrive all the products"""
-        return super().list(request, *args, **kwargs)
-
-    @swagger_auto_schema(
-        operation_summary="Create a product by admin",
-        operation_description="This allow an admin to create a product",
-        request_body=ProductSerializer,
+        operation_summary='Retrieve a list of products',
+        operation_description='Filter and search products with various parameters',
+        manual_parameters=[
+            openapi.Parameter(
+                name='search',
+                in_=openapi.IN_QUERY,
+                description='Search term for product name or description',
+                type=openapi.TYPE_STRING
+            ),
+            openapi.Parameter(
+                name='ordering',
+                in_=openapi.IN_QUERY,
+                description='Field to order results (price, -price, updated_at etc.)',
+                type=openapi.TYPE_STRING
+            ),
+            openapi.Parameter(
+                name='page',
+                in_=openapi.IN_QUERY,
+                description='Page number for pagination',
+                type=openapi.TYPE_INTEGER
+            ),
+            openapi.Parameter(
+                name='price__gt',
+                in_=openapi.IN_QUERY,
+                description='Filter products with price greater than',
+                type=openapi.TYPE_NUMBER
+            ),
+            openapi.Parameter(
+                name='price__lt',
+                in_=openapi.IN_QUERY,
+                description='Filter products with price less than',
+                type=openapi.TYPE_NUMBER
+            ),
+            openapi.Parameter(
+                name='category_id',
+                in_=openapi.IN_QUERY,
+                description='Filter by exact category ID',
+                type=openapi.TYPE_INTEGER
+            )
+        ],
         responses={
-            201: ProductSerializer,
-            400: "Bad Request"
+            200: ProductSerializer(many=True),
+            400: 'Bad Request'
         }
     )
-    def create(self, request, *args, **kwargs):
-        """Only authenticated admin can create product"""
-        return super().create(request, *args, **kwargs)
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
     
 class CategoryViewList(ModelViewSet):
