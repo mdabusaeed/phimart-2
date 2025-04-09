@@ -3,23 +3,30 @@ from products.serializers import ProductSerializer, CategorySerializers, ReviewS
 from django.db.models import Count
 from rest_framework.viewsets import ModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend 
-from products.filters import ProductFilterSet
+from products.filters import ProductFilter
 from rest_framework.filters import SearchFilter, OrderingFilter
-from products.pagination import CustomPagination
+from products.pagination import DefaultPagination
 from api.permissions import IsAdminOrReadOnly
 from rest_framework.permissions import DjangoModelPermissions
 from products.permissions import IsReveiwAuthor
 from drf_yasg.utils import swagger_auto_schema
 
 
-class ProductViewList(ModelViewSet):
+class ProductViewSet(ModelViewSet):
+    """
+    API endpoint for managing products in the e-commerce store
+     - Allows authenticated admin to create, update, and delete products
+     - Allows users to browse and filter product
+     - Support searching by name, description, and category
+     - Support ordering by price and updated_at
+    """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_class = ProductFilterSet
-    pagination_class = CustomPagination  
-    search_fields = ['name','description', 'category__name']
-    ordering_fields = ['price', 'stock']
+    filterset_class = ProductFilter
+    pagination_class = DefaultPagination
+    search_fields = ['name', 'description']
+    ordering_fields = ['price', 'updated_at']
     permission_classes = [IsAdminOrReadOnly]
 
     @swagger_auto_schema(

@@ -1,25 +1,12 @@
-from products.models import Product
 from django_filters.rest_framework import FilterSet
+from products.models import Product
 
+   
 
-
-
-class ProductFilterSet(FilterSet):
-    price_gt = filters.NumberFilter(field_name='price', lookup_expr='gt')
-    price_lt = filters.NumberFilter(field_name='price', lookup_expr='lt')
-
+class ProductFilter(FilterSet):
     class Meta:
         model = Product 
         fields = {
             'category_id': ['exact'],
-            # 'price' is not needed here since we are defining price_gt and price_lt explicitly
+            'price': ['gt', 'lt'],
         }
-        
-
-# class ProductFilterSet(FilterSet):
-#     class Meta:
-#         model = Product 
-#         fields = {
-#             'category_id': ['exact'],
-#             'price': ['gt', 'lt'],
-#         }
