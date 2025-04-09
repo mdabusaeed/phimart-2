@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'djoser',
     'drf_yasg',
+    'django_filters',
     "corsheaders",
     'api',
     'order',
