@@ -17,7 +17,7 @@ def send_activation_email(user, current_site):
     # Generate activation link
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     token = email_verification_token.make_token(user)
-    activation_link = f"{settings.DJOSER['EMAIL_FRONTEND_PROTOCOL']}://{settings.DJOSER['EMAIL_FRONTEND_DOMAIN']}/{settings.DJOSER['ACTIVATION_URL'].format(uid=uid, token=token)}"
+    activation_link = f"{settings.DJOSER['EMAIL_FRONTEND_PROTOCOL']}://{settings.DJOSER['EMAIL_FRONTEND_DOMAIN']}/api/activate/{uid}/{token}/"
     
     # Render email template
     message = render_to_string('users/activation_email.html', {
