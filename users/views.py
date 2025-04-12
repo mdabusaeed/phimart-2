@@ -11,33 +11,61 @@ from users.utils import send_activation_email
 
 User = get_user_model()
 
-# Create your views here.
-
-@api_view(['POST'])
+@api_view(['GET'])
 def activate_user(request, uidb64, token):
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
+        return Response(
+            {'message': 'Invalid activation link or user not found'}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
-    if user is not None and email_verification_token.check_token(user, token):
+    if user.is_active:
+        return Response(
+            {'message': 'Account is already activated'}, 
+            status=status.HTTP_200_OK
+        )
+
+    if email_verification_token.check_token(user, token):
         user.is_active = True
         user.save()
-        return Response({'message': 'Account activated successfully'}, status=status.HTTP_200_OK)
+        return Response(
+            {'message': 'Account activated successfully'}, 
+            status=status.HTTP_200_OK
+        )
     else:
-        return Response({'message': 'Invalid activation link'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {'message': 'Invalid or expired activation link'}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 @api_view(['POST'])
 def resend_activation_email(request):
     email = request.data.get('email')
+    if not email:
+        return Response(
+            {'message': 'Email is required'}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
     try:
         user = User.objects.get(email=email)
         if user.is_active:
-            return Response({'message': 'Account is already activated'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'message': 'Account is already activated'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
         
         current_site = get_current_site(request)
         send_activation_email(user, current_site)
-        return Response({'message': 'Activation email sent successfully'}, status=status.HTTP_200_OK)
+        return Response(
+            {'message': 'Activation email sent successfully'}, 
+            status=status.HTTP_200_OK
+        )
     except User.DoesNotExist:
-        return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response(
+            {'message': 'User not found'}, 
+            status=status.HTTP_404_NOT_FOUND
+        )

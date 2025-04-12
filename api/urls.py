@@ -2,6 +2,8 @@ from django.urls import path, include
 from products.views import ProductViewList, CategoryViewList, ReviewViewList, ProductImageViewSet
 from order.views import CartViewSet, CartItemViewSet, OrderViewSet
 from rest_framework_nested import routers
+from rest_framework.routers import DefaultRouter
+from users.views import activate_user, resend_activation_email
 
 router = routers.DefaultRouter()
 router.register('products', ProductViewList, basename='products')
@@ -25,6 +27,8 @@ urlpatterns = [
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
     path('auth/', include('djoser.urls.authtoken')),
+    path('activate/<str:uidb64>/<str:token>/', activate_user, name='activate_user'),
+    path('resend-activation/', resend_activation_email, name='resend_activation_email'),
 ]
 
 
