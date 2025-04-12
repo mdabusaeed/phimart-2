@@ -2,14 +2,14 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>অ্যাকাউন্ট অ্যাক্টিভেট করুন</title>
+    <title>Activate your account</title>
 </head>
 <body>
-    <h2>{{ site_name }} এ স্বাগতম!</h2>
-    <p>প্রিয় {{ user.first_name }},</p>
-    <p>{{ site_name }} এ রেজিস্ট্রেশন করার জন্য ধন্যবাদ। আপনার অ্যাকাউন্ট অ্যাক্টিভেট করতে নিচের লিংকে ক্লিক করুন:</p>
-    <p><a href="{{ activation_link }}">অ্যাকাউন্ট অ্যাক্টিভেট করুন</a></p>
-    <p>আপনি যদি আমাদের সাথে অ্যাকাউন্ট তৈরি না করে থাকেন, তাহলে এই ইমেইলটি উপেক্ষা করতে পারেন।</p>
-    <p>শুভেচ্ছান্তে,<br>{{ site_name }} টিম</p>
+    <h2>Welcome to {{ site_name }}!</h2>
+    <p>Hi {{ user.first_name }},</p>
+    <p>Thank you for registering with {{ site_name }}. Please click the link below to activate your account:</p>
+    <p><a href="{{ activation_link }}">Activate Account</a></p>
+    <p>If you didn't create an account with us, you can safely ignore this email.</p>
+    <p>Best regards,<br>{{ site_name }} Team</p>
 </body>
 </html> 

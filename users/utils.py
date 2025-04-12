@@ -13,7 +13,7 @@ class EmailVerificationTokenGenerator(PasswordResetTokenGenerator):
 email_verification_token = EmailVerificationTokenGenerator()
 
 def send_activation_email(user, current_site):
-    subject = 'আপনার Phimart অ্যাকাউন্ট অ্যাক্টিভেট করুন'
+    subject = 'Activate your Phimart account'
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     token = email_verification_token.make_token(user)
     
