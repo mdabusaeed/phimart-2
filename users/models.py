@@ -9,7 +9,6 @@ class User(AbstractUser):
     address = models.TextField(blank=True, null=True)
     phone = models.CharField(max_length=11 ,blank=True, null=True)
     activation_token_created = models.DateTimeField(null=True, blank=True)
-    ro
 
     objects = CustomUserManager()
 
